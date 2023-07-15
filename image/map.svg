@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<svg width="800" height="400" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+ <style type="text/css">.st0{opacity:1.0;}
+	.st1{fill:RGBA(255,0,0,0.9);stroke:RGBA(255,255,0,0.9);stroke-width:0.3;stroke-miterlimit:10;}
+	.st2{fill:RGBA(0,0,0,0.9);stroke:RGBA(255,255,255,0.9);stroke-width:0.3;stroke-miterlimit:10;}</style>
+ <g class="layer">
+  <title>Layer 1</title>
+  <rect class="st0" fill="#bb5620" height="402" id="SEA" width="802" x="-1" y="-1"/>
+  <line class="st2" id="svg_82" x1="0" x2="800" y1="33.3" y2="33.3"/>
+  <line class="st2" id="svg_83" x1="0" x2="800" y1="66.7" y2="66.7"/>
+  <line class="st2" id="svg_84" x1="0" x2="800" y1="100" y2="100"/>
+  <line class="st2" id="svg_85" x1="0" x2="800" y1="133.3" y2="133.3"/>
+  <line class="st2" id="svg_86" x1="0" x2="800" y1="166.7" y2="166.7"/>
+  <line class="st2" id="svg_87" x1="0" x2="800" y1="200" y2="200"/>
+  <line class="st2" id="svg_88" x1="0" x2="800" y1="233.3" y2="233.3"/>
+  <line class="st2" id="svg_89" x1="0" x2="800" y1="266.7" y2="266.7"/>
+  <line class="st2" id="svg_90" x1="0" x2="800" y1="300" y2="300"/>
+  <line class="st2" id="svg_91" x1="0" x2="800" y1="333.3" y2="333.3"/>
+  <line class="st2" id="svg_92" x1="0" x2="800" y1="366.7" y2="366.7"/>
+  <line class="st2" id="svg_93" x1="1" x2="1" y1="0" y2="400"/>
+  <line class="st2" id="svg_94" x1="33.3" x2="33.3" y1="0" y2="400"/>
+  <line class="st2" id="svg_95" x1="66.7" x2="66.7" y1="0" y2="400"/>
+  <line class="st2" id="svg_96" x1="100" x2="100" y1="0" y2="400"/>
+  <line class="st2" id="svg_97" x1="133.3" x2="133.3" y1="0" y2="400"/>
+  <line class="st2" id="svg_98" x1="166.7" x2="166.7" y1="0" y2="400"/>
+  <line class="st2" id="svg_99" x1="200" x2="200" y1="0" y2="400"/>
+  <line class="st2" id="svg_100" x1="233.3" x2="233.3" y1="0" y2="400"/>
+  <line class="st2" id="svg_101" x1="266.7" x2="266.7" y1="0" y2="400"/>
+  <line class="st2" id="svg_102" x1="300" x2="300" y1="0" y2="400"/>
+  <line class="st2" id="svg_103" x1="333.3" x2="333.3" y1="0" y2="400"/>
+  <line class="st2" id="svg_104" x1="366.7" x2="366.7" y1="0" y2="400"/>
+  <line class="st2" id="svg_105" x1="400" x2="400" y1="0" y2="400"/>
+  <line class="st2" id="svg_106" x1="433.3" x2="433.3" y1="0" y2="400"/>
+  <line class="st2" id="svg_107" x1="466.7" x2="466.7" y1="0" y2="400"/>
+  <line class="st2" id="svg_108" x1="500" x2="500" y1="0" y2="400"/>
+  <line class="st2" id="svg_109" x1="533.3" x2="533.3" y1="0" y2="400"/>
+  <line class="st2" id="svg_110" x1="566.7" x2="566.7" y1="0" y2="400"/>
+  <line class="st2" id="svg_111" x1="600" x2="600" y1="0" y2="400"/>
+  <line class="st2" id="svg_112" x1="633.3" x2="633.3" y1="0" y2="400"/>
+  <line class="st2" id="svg_113" x1="666.7" x2="666.7" y1="0" y2="400"/>
+  <line class="st2" id="svg_114" x1="700" x2="700" y1="0" y2="400"/>
+  <line class="st2" id="svg_115" x1="733.3" x2="733.3" y1="0" y2="400"/>
+  <line class="st2" id="svg_116" x1="766.7" x2="766.7" y1="0" y2="400"/>
+ </g>
+</svg>

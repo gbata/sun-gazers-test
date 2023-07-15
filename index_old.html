@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Sangazers</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+<style> 
+/* OUTLINE */
+#myearth::after {
+	content: "";
+	position: absolute;
+	top: 6%;
+	bottom: 6%;
+	left: 6%;
+	right: 6%;
+	border: 1px rgb(14, 14, 14) solid;
+	border-radius: 50%;
+	box-sizing: border-box;
+}
+</style>
+
+<script src="miniature.earth.js"></script>
+<script src="miniature.earth.mapdraw.js"></script>
+
+
+<script>
+
+    var myearth, coronalHoles = [];
+    
+	window.addEventListener( "earthjsload", function() {
+
+		myearth = new Earth( "myearth", {
+			location: { lat: 10, lng: -80 },
+            mapImage: 'image/map.jpg',
+            light: 'sun',
+            zoomable: false
+		} );
+
+        myearth.goTo( 
+                {lat:0.40051881932282596, lng:27.563553872444215}, 
+                { relativeDuration: 100, approachAngle: 20, zoom: 1.1 } 
+        );
+
+
+        myearth.addEventListener( 'drawtexture', function( event ) {
+		
+            Earth.MapDraw.enable( this );
+            
+        } );
+		
+		myearth.addEventListener( "ready", function() {
+  
+            /* load CSV data */
+		
+            var ajax = new XMLHttpRequest();
+            ajax.onreadystatechange = function() {
+                if ( this.readyState == 4 ) {
+                    loadCoronalHolesFromCSV( myearth, this.responseText );				
+                }
+            };
+            ajax.open("GET", "holes.csv", true);
+            ajax.send();
+
+		
+		} );	
+
+
+        // CSV
+
+        function loadCoronalHolesFromCSV( earth, csv ) {
+            var pointsAsStr, pointsAsObj = [];
+
+            var lines = csv.split( '\n' );
+            
+            for ( var i = 0; i < lines.length; i++ ) {
+            
+                var fields = lines[i].split( ';' );
+                
+                pointsAsStr = fields[3].split( '#' );
+
+                for ( var j = 0; j < pointsAsStr.length; j++ ) {
+                    pointsAsObj.push( JSON.parse( pointsAsStr[j] ) );
+                }
+
+                coronalHoles.push( [ fields[ 0 ], fields[ 1 ], fields[ 2 ], pointsAsObj ] );  
+
+                pointsAsObj = [];
+            }
+
+        }
+
+	} );
+
+    var captions = [];
+
+    function drawHole(date, time, caption = false) {
+
+        for ( hole of coronalHoles ) {
+
+            if ( ( hole[1] === date ) && ( hole[2] === time ) ) {
+
+                myearth.drawPolygon( hole[3],
+                    {
+                        color: '#282930',
+                        strokeWidth: 0.65,
+                        strokeColor: '#fff'
+                    }
+                );
+
+                if ( caption ) {
+                    captions.push( myearth.addOverlay( {
+                        location: hole[3][hole[3].length * 0],
+                        content : '<strong style="color:#282930">' +  hole[0] + '<br>' + hole[1].slice(0, 4) + '/' + hole[1].slice(4, 6) + '/' + hole[1].slice(6, 8) + '<br>' + hole[2] +'</strong>',
+                        depthScale : 0.5
+                    } )); 
+                }
+                
+
+            }
+        }
+
+        // apply the updated map
+	    myearth.updateMap();
+
+    }
+
+</script>
+
+
+</head>
+
+<body>
+    <div id="info"></div>
+    <div>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230502', '14:00', 1 ); }, 0 ); "> 02.05.2023 <span style="color: red";>14:00</span></button>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230502', '15:00', 1 ); }, 0 ); "> 02.05.2023 <span style="color: red";>15:00</span></button>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230502', '16:00', 1 ); }, 0 ); "> 02.05.2023 <span style="color: red";>16:00</span></button>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230502', '17:00', 1 ); }, 0 ); "> 02.05.2023 <span style="color: red";>17:00</span></button>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230502', '18:00', 1 ); }, 0 ); "> 02.05.2023 <span style="color: red";>18:00</span></button>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230502', '19:00', 1 ); }, 0 ); "> 02.05.2023 <span style="color: red";>19:00</span></button>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230502', '20:00', 1 ); }, 0 ); "> 02.05.2023 <span style="color: red";>20:00</span></button>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230502', '21:00', 1 ); }, 0 ); "> 02.05.2023 <span style="color: red";>21:00</span></button>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230502', '22:00', 1 ); }, 0 ); "> 02.05.2023 <span style="color: red";>22:00</span></button>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230502', '23:00', 1 ); }, 0 ); "> 02.05.2023 <span style="color: red";>23:00</span></button><br>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230503', '00:00', 1 ); }, 0 ); "> 03.05.2023 <span style="color: red";>00:00</span></button>
+        <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230503', '01:00', 1 ); }, 0 ); "> 03.05.2023 <span style="color: red";>01:00</span></button>
+        <br>
+		<button onclick="myearth.redrawMap();">Restore map</button>
+    </div>
+    <div style="max-width: 800px; margin: 2em auto;">		
+		<div id="myearth"></div>				
+	</div>
+<script>
+
+const btnS = document.querySelectorAll('button');
+
+    btnS.forEach(btn => btn.addEventListener('click', (e) => {
+        //e.preventDefault();
+       if ( captions.length != 0 ) {
+        captions.forEach( caption => caption.remove() );
+        captions = [];
+       }
+    }));
+
+</script>
+
+</body>
