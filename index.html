@@ -5,7 +5,7 @@
 
 <title>Sangazers</title>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, user-scalable=yes">
 
 <style> 
 /* OUTLINE */
@@ -41,6 +41,33 @@
   font-size: 80px;
   color: white;
 }
+
+@media only screen and (max-width: 1024px) {
+    .btns{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .btns{
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    .btns{
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .calendar{
+        margin-top: -40em;
+    }  
+}
+
+
+
 </style>
 
 <script src="miniature.earth.js"></script>
@@ -259,7 +286,11 @@
 
 <body style="background-color: black;">
     <div id="info"></div>
-    <div>
+    <div style="text-align: center;">
+        <h1 style="border-color: azure; border-width: 5px; font-family:Albertus Extra Bold;">SUN GAZERS</h1>
+    </div>
+
+    <div class="btns">
         <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230430', '23:00:41', 1 ); }, 0 ); "> 30.04.2023 <span style="color: red";>23:00</span></button>
         <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230501', '03:00:41', 1 ); }, 0 ); "> 01.05.2023 <span style="color: red";>03:00</span></button>
         <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230501', '07:00:41', 1 ); }, 0 ); "> 01.05.2023 <span style="color: red";>07:00</span></button>
@@ -292,58 +323,61 @@
     </div>
     <br><br><br>
 
-<script src="airdatepicker/air-datepicker.js"></script>
 
-<div>
-<input type="text" id="airdatepicker" class="form-control" >
-</div>
 
-<script>
-       new AirDatepicker('#airdatepicker', {
-            dateFormat: 'yyyy MM dd',
-            dateTimeSeparator: ', ',
-            timepicker: true,
-            hoursStep: 1,
-            minutesStep: 5,
-            inline: true,
-            todayButton: true,
-            startDate: new Date(),
-            onSelect({date}) {
-                    dateTimeCur = document.getElementById('airdatepicker').value;
-                    datecur = dateTimeCur.split(', ')[0];
-                    datecur = datecur.split(' ').join('');
-                    timecur = dateTimeCur.split(', ')[1];
-                    timecur = timecur.split(' ').join('');
-                    if ( captions.length != 0 ) {
-                        captions.forEach( caption => caption.remove() );
-                        captions = [];
-                        myearth.redrawMap();
-                    }
-
-                    drawHole(datecur, timecur, 1 );
-                }     
-            });
-</script>
-
-<div style="max-width: 72%; max-height: 100%; margin: -25em auto;">		
+<div class="model" style="max-width: 100%; max-height: 100%; margin: 0em auto;">		
             <div id="myearth" class="earth-container earth-ready earth-draggable">	
                 <div id="atmos"></div>
                 <canvas width="1920" height="922" style="display: block; width: 1920px; height: 922px;"></canvas>
             </div>	   
 </div>
-<div style="border-width: 5px;border-color: #ffffff;">
-<label class="custom-checkbox" style="text-align: right;">
-    <input type="checkbox" value="value-1">
-    <span>Корональные дыры</span><br>
-    <input type="checkbox" value="value-2">
-    <span>Протуберанцы</span><br>
-    <input type="checkbox" value="value-3">
-    <span>Корональные дыры</span><br>
-    <input type="checkbox" value="value-4">
-    <span>Корональные дыры</span><br>
-</label>
+<script src="airdatepicker/air-datepicker.js"></script>
+
+<div class="calendar" >
+    <div style="max-width: 50%;">
+        <input type="text" id="airdatepicker" class="form-control" >
+    </div>
+
+    <div style="-webkit-box-align: right; max-width: 50%; border-width: 5px;border-color: #ffffff;">
+        <label class="custom-checkbox" style="text-align: right;">
+            <input type="checkbox" value="value-1">
+            <span>Корональные дыры</span><br>
+            <input type="checkbox" value="value-2">
+            <span>Протуберанцы</span><br>
+            <input type="checkbox" value="value-3">
+            <span>Корональные дыры</span><br>
+            <input type="checkbox" value="value-4">
+            <span>Корональные дыры</span><br>
+        </label>
+        </div>
 </div>
 
+<script>
+    new AirDatepicker('#airdatepicker', {
+         dateFormat: 'yyyy MM dd',
+         dateTimeSeparator: ', ',
+         timepicker: true,
+         hoursStep: 1,
+         minutesStep: 5,
+         inline: true,
+         todayButton: true,
+         startDate: new Date(),
+         onSelect({date}) {
+                 dateTimeCur = document.getElementById('airdatepicker').value;
+                 datecur = dateTimeCur.split(', ')[0];
+                 datecur = datecur.split(' ').join('');
+                 timecur = dateTimeCur.split(', ')[1];
+                 timecur = timecur.split(' ').join('');
+                 if ( captions.length != 0 ) {
+                     captions.forEach( caption => caption.remove() );
+                     captions = [];
+                     myearth.redrawMap();
+                 }
+
+                 drawHole(datecur, timecur, 1 );
+             }     
+         });
+</script>
 <script>
 
 const btnS = document.querySelectorAll('button');
