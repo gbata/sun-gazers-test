@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><link rel="stylesheet" href="airdatepicker/air-datepicker.css">
+<link rel="stylesheet" href="css/style.css">
+
 <title>Sangazers</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
@@ -14,15 +16,35 @@
 	bottom: 6%;
 	left: 6%;
 	right: 6%;
-	border: 1px rgb(14, 14, 14) solid;
-	border-radius: 50%;
 	box-sizing: border-box;
+}
+
+
+.gallery {
+  background: #EEE;
+}
+
+.gallery-cell {
+  width: 66%;
+  height: 200px;
+  margin-right: 10px;
+  background: #8C8;
+  counter-increment: gallery-cell;
+}
+
+/* cell number */
+.gallery-cell:before {
+  display: block;
+  text-align: center;
+  content: counter(gallery-cell);
+  line-height: 200px;
+  font-size: 80px;
+  color: white;
 }
 </style>
 
 <script src="miniature.earth.js"></script>
 <script src="miniature.earth.mapdraw.js"></script>
-
 
 <script>
 
@@ -34,19 +56,19 @@
 			location: { lat: 10, lng: -80 },
             mapImage: 'image/map.jpg',
             light: 'sun',
-            zoomable: false
+            zoomable: false,
 		} );
 
         myearth.goTo( 
                 {lat:0.40051881932282596, lng:27.563553872444215}, 
-                { relativeDuration: 100, approachAngle: 20, zoom: 1.1 } 
+                { relativeDuration: 100, approachAngle: 20, zoom: 0.9 } 
         );
 
 
         myearth.addEventListener( 'drawtexture', function( event ) {
 		
             Earth.MapDraw.enable( this );
-            
+
         } );
 		
 		myearth.addEventListener( "ready", function() {
@@ -61,9 +83,87 @@
             };
             ajax.open("GET", "holes.csv", true);
             ajax.send();
+            var star_count = 2500;
+		var stars = [];
 
-		
-		} );	
+		for ( var i=0; i < star_count; i++ ) {
+
+			stars.push( {
+				location : { lat: getRandomInt(-85,85), lng: getRandomInt(-180,180) },
+				offset: getRandomInt(35,60),
+				opacity: getRandomInt(20,80)/100,
+				color: 'rgb('+ getRandomInt(180,255) +','+ getRandomInt(180,255) +','+ getRandomInt(180,255) +')',
+			} );
+
+		}
+
+		this.addPoints( {
+			points: stars,
+			scale: 0.5 + window.innerWidth / 2000
+		} );
+
+		prepareLightMask();
+		updateMapTexture();
+	    } );
+
+
+        function prepareLightMask() {
+
+        lightMask = document.createElement('canvas');
+        lightMaskCtx = lightMask.getContext('2d');
+
+        var w = myearth.mapCanvas.width, h = myearth.mapCanvas.height;
+
+        lightMask.width = w * 2;
+        lightMask.height = h;
+
+        lightGradient = lightMaskCtx.createRadialGradient(
+            w/2, h/2, h*0.38,
+            w/2, h/2, w*0.28,
+        );
+
+        lightGradient.addColorStop( 0, "RGBA(0,0,0,1)" );
+        lightGradient.addColorStop( 1, "RGBA(0,0,0,0)" );
+
+        }
+
+
+        function updateMapTexture() {
+
+        updateMapTimer = false;
+
+        var w = myearth.mapCanvas.width, h = myearth.mapCanvas.height;
+
+        // night background
+        var nightImg = document.getElementById('night');
+        myearth.mapContext.drawImage( nightImg, 0, 0, nightImg.width, nightImg.height, 0, 0, w, h );
+
+        var offset = sunAngle / 360 * w;
+
+        lightMaskCtx.clearRect(0, 0, w*2, h);
+        lightMaskCtx.globalCompositeOperation='source-over';
+        lightMaskCtx.fillStyle = lightGradient;
+        lightMaskCtx.fillRect( 0, 0, w, h );
+        lightMaskCtx.drawImage( lightMask, 0, 0, w, h, w, 0, w, h );
+
+
+        var dayImg = document.getElementById('day');
+        lightMaskCtx.globalCompositeOperation='source-in';
+        lightMaskCtx.drawImage( dayImg, 0, 0, dayImg.width, dayImg.height, offset, 0, w, h );
+
+        myearth.mapContext.drawImage( lightMask, offset, 0, w, h, 0, 0, w, h );
+
+        myearth.updateMap();
+
+        }
+
+        function getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min)) + min;
+        }
+            
+        } );
 
 
         // CSV
@@ -90,16 +190,16 @@
 
         }
 
-	} );
-
     var captions = [];
 
     function drawHole(date, time, caption = false) {
 
+
         for ( hole of coronalHoles ) {
 
-            if ( ( hole[1] === date ) && ( hole[2] === time ) ) {
-
+            if ( ( hole[1] === date ) && ( hole[2].indexOf(time) != -1 )) {
+                
+                
                 myearth.drawPolygon( hole[3],
                     {
                         color: '#282930',
@@ -153,8 +253,11 @@
 
 
 </head>
+<style>
 
-<body>
+</style>
+
+<body style="background-color: black;">
     <div id="info"></div>
     <div>
         <button onclick="myearth.redrawMap(); setTimeout( () => { drawHole( '20230430', '23:00:41', 1 ); }, 0 ); "> 30.04.2023 <span style="color: red";>23:00</span></button>
@@ -187,9 +290,60 @@
                 onClick="myearth.redrawMap(); setTimeout( () => { drawHole(document.getElementById('CH_date').value, document.getElementById('CH_time').value, 1); }, 0 ); ">
         </form>
     </div>
-    <div style="max-width: 800px; margin: 2em auto;">		
-		<div id="myearth"></div>				
-	</div>
+    <br><br><br>
+
+<script src="airdatepicker/air-datepicker.js"></script>
+
+<div>
+<input type="text" id="airdatepicker" class="form-control" >
+</div>
+
+<script>
+       new AirDatepicker('#airdatepicker', {
+            dateFormat: 'yyyy MM dd',
+            dateTimeSeparator: ', ',
+            timepicker: true,
+            hoursStep: 1,
+            minutesStep: 5,
+            inline: true,
+            todayButton: true,
+            startDate: new Date(),
+            onSelect({date}) {
+                    dateTimeCur = document.getElementById('airdatepicker').value;
+                    datecur = dateTimeCur.split(', ')[0];
+                    datecur = datecur.split(' ').join('');
+                    timecur = dateTimeCur.split(', ')[1];
+                    timecur = timecur.split(' ').join('');
+                    if ( captions.length != 0 ) {
+                        captions.forEach( caption => caption.remove() );
+                        captions = [];
+                        myearth.redrawMap();
+                    }
+
+                    drawHole(datecur, timecur, 1 );
+                }     
+            });
+</script>
+
+<div style="max-width: 72%; max-height: 100%; margin: -25em auto;">		
+            <div id="myearth" class="earth-container earth-ready earth-draggable">	
+                <div id="atmos"></div>
+                <canvas width="1920" height="922" style="display: block; width: 1920px; height: 922px;"></canvas>
+            </div>	   
+</div>
+<div style="border-width: 5px;border-color: #ffffff;">
+<label class="custom-checkbox" style="text-align: right;">
+    <input type="checkbox" value="value-1">
+    <span>Корональные дыры</span><br>
+    <input type="checkbox" value="value-2">
+    <span>Протуберанцы</span><br>
+    <input type="checkbox" value="value-3">
+    <span>Корональные дыры</span><br>
+    <input type="checkbox" value="value-4">
+    <span>Корональные дыры</span><br>
+</label>
+</div>
+
 <script>
 
 const btnS = document.querySelectorAll('button');
@@ -204,4 +358,60 @@ const btnS = document.querySelectorAll('button');
 
 </script>
 
+
+<style>
+
+    #back-link {
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: #0d130e;
+        padding: 0.5em;
+        font-size: 26px;
+        z-index: 10000;
+        border-right: 1px RGBA(255,255,255,0.5) solid;
+        border-bottom: 1px RGBA(255,255,255,0.5) solid;
+    }
+    #back-link img {
+        display: block;
+        width: 4em;
+        height: auto;
+    }
+    
+    @media (max-width: 1199px) {
+        #back-link {
+            font-size: 20px;
+        }
+    }
+    @media (max-width: 511px) {
+        #back-link {
+            font-size: 16px;
+        }
+    }
+    
+    #legal-footer-wrap {
+        position: relative;
+        height: 0;
+        z-index: 10002;
+        font-family: Arial, sans-serif;
+    }
+    
+    #legal-footer {
+        position: absolute;
+        bottom: 0.5em;
+        right: 0.5em;
+    }
+    
+    #legal-footer a {
+        text-decoration: none;
+        color: inherit;
+        padding: 0 0.5em;
+        font-size: 10px;
+    }
+    
+    </style>
+    
+    <div id="legal-footer-wrap">
+        
+    </div>
 </body>
